@@ -13,3 +13,7 @@
     </tr>
   <% end %>
 </table>
+
+<div>
+  <%= link "New User", to: Routes.user_path(@conn, :new) %>
+</div>

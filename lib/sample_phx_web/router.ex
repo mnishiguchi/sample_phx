@@ -16,8 +16,7 @@ defmodule SamplePhxWeb.Router do
   scope "/", SamplePhxWeb do
     pipe_through :browser
 
-    get "/users", UserController, :index
-    get "/users/:id", UserController, :show
+    resources "/users", UserController, only: ~w(index show new create)a
     get "/", PageController, :index
   end
 
