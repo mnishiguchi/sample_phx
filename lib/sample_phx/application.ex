@@ -8,7 +8,7 @@ defmodule SamplePhx.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      # SamplePhx.Repo,
+      SamplePhx.Repo,
       # Start the Telemetry supervisor
       SamplePhxWeb.Telemetry,
       # Start the PubSub system
