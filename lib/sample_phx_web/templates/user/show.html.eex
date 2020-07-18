@@ -1,1 +1,8 @@
-<h1>User#show</h1>
+<h1>Showing User</h1>
+
+<b><%= first_name(@user) %></b>
+(<%= @user.id %>)
+
+<div>
+  <%= link "All Users", to: Routes.user_path(@conn, :index) %>
+</div>
