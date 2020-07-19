@@ -27,6 +27,7 @@ defmodule SamplePhxWeb.UserController do
     case Repo.insert(changeset) do
       {:ok, user} ->
         conn
+        |> SamplePhxWeb.Auth.login(user)
         |> put_flash(:info, "#{user.name} created")
         |> redirect(to: Routes.user_path(conn, :index))
 
