@@ -1,5 +1,10 @@
 # SamplePhx
 
+![](https://img.shields.io/badge/Elixir-1.10.4%20(OTP%2023)-blue)
+![](https://img.shields.io/badge/Phoenix-1.5.3-blue)
+
+## Get started
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
