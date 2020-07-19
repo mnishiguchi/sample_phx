@@ -1,6 +1,5 @@
 defmodule SamplePhxWeb.UserController do
   use SamplePhxWeb, :controller
-
   alias SamplePhx.Repo
   alias SamplePhx.User
 
