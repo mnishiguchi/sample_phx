@@ -67,6 +67,7 @@ defmodule SamplePhxWeb do
       import Phoenix.View
 
       import SamplePhxWeb.ErrorHelpers
+      import SamplePhxWeb.InputHelpers
       import SamplePhxWeb.Gettext
       alias SamplePhxWeb.Router.Helpers, as: Routes
     end
