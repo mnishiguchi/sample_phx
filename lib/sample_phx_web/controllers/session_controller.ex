@@ -21,5 +21,8 @@ defmodule SamplePhxWeb.SessionController do
   end
 
   def delete(conn, _params) do
+    conn
+    |> SamplePhxWeb.Auth.logout()
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end
