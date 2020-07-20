@@ -1,8 +1,6 @@
 <section class="jumbotron">
   <h1 class="display-4"><%= gettext "Welcome to %{name}!", name: "Sample Phx" %></h1>
   <p class="lead">Peace-of-mind from prototype to production</p>
-  <hr class="my-4">
-  <%= link "Sign up", to: Routes.user_path(@conn, :new), class: "btn btn-primary" %>
 </section>
 <section class="row">
   <article class="column">
