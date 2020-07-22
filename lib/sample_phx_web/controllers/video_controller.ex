@@ -4,6 +4,8 @@ defmodule SamplePhxWeb.VideoController do
   alias SamplePhx.Cinema
   alias SamplePhx.Cinema.Video
 
+  plug :scrub_params, "video" when action in [:create, :update]
+
   def index(conn, _params) do
     videos = Cinema.list_videos()
     render(conn, "index.html", videos: videos)
