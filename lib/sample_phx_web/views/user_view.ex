@@ -1,7 +1,7 @@
 defmodule SamplePhxWeb.UserView do
   use SamplePhxWeb, :view
 
-  alias SamplePhx.User
+  alias SamplePhx.Accounts.User
 
   def first_name(%User{name: name}) do
     name

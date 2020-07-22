@@ -2,15 +2,14 @@ defmodule SamplePhxWeb.Auth do
   import Plug.Conn
   import Phoenix.Controller
   alias SamplePhxWeb.Router.Helpers, as: Routes
-  alias SamplePhx.User
 
   def init(opts) do
-    Keyword.fetch!(opts, :repo)
+    opts
   end
 
-  def call(conn, repo) do
+  def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
-    user = user_id && repo.get(User, user_id)
+    user = user_id && SamplePhx.Accounts.get_user(user_id)
 
     # Make current_user available in all downstream functions including controllers and views.
     assign(conn, :current_user, user)
@@ -28,6 +27,7 @@ defmodule SamplePhxWeb.Auth do
     end
   end
 
+  @spec login(Plug.Conn.t(), atom | %{id: any}) :: Plug.Conn.t()
   def login(conn, user) do
     conn
     |> assign(:current_user, user)
@@ -37,24 +37,7 @@ defmodule SamplePhxWeb.Auth do
     |> configure_session(renew: true)
   end
 
-  def login_by_username_and_password(conn, username, given_password, opts) do
-    repo = Keyword.fetch!(opts, :repo)
-    user = repo.get_by(User, username: username)
-
-    cond do
-      user && Bcrypt.verify_pass(given_password, user.password_hash) ->
-        {:ok, login(conn, user)}
-
-      user ->
-        {:error, :unauthorized, conn}
-
-      true ->
-        # Simulate password check with variable timing for possible timing attacks.
-        Bcrypt.no_user_verify()
-        {:error, :not_found, conn}
-    end
-  end
-
+  @spec logout(Plug.Conn.t()) :: Plug.Conn.t()
   def logout(conn) do
     configure_session(conn, drop: true)
   end

@@ -1,7 +1,6 @@
-defmodule SamplePhx.User do
+defmodule SamplePhx.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias SamplePhx.User
 
   schema "users" do
     field :name, :string
@@ -12,17 +11,18 @@ defmodule SamplePhx.User do
     timestamps()
   end
 
-  def changeset(%User{} = model, attrs \\ %{}) do
-    model
-    |> cast(attrs, [:name, :username, :password])
-    |> validate_required([:name, :username, :password])
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :username])
+    |> validate_required([:name, :username])
     |> validate_length(:username, min: 1, max: 20)
   end
 
-  def registration_changeset(model, attrs) do
-    model
+  def registration_changeset(user, attrs) do
+    user
     |> changeset(attrs)
-    |> cast(attrs, [:password], [])
+    |> cast(attrs, [:password])
+    |> validate_required([:password])
     |> validate_length(:password, min: 6, max: 100)
     |> put_password_hash()
   end
@@ -30,7 +30,7 @@ defmodule SamplePhx.User do
   defp put_password_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
+        put_change(changeset, :password_hash, Pbkdf2.hash_pwd_salt(password))
 
       _ ->
         changeset
