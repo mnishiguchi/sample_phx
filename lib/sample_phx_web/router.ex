@@ -19,6 +19,7 @@ defmodule SamplePhxWeb.Router do
 
     resources "/sessions", SessionController, only: ~w(new create delete)a
     resources "/users", UserController, only: ~w(index show new create)a
+    resources "/videos", VideoController
     get "/", PageController, :index
   end
 
