@@ -1,5 +1,7 @@
 defmodule SamplePhxWeb.Auth do
   import Plug.Conn
+  import Phoenix.Controller
+  alias SamplePhxWeb.Router.Helpers, as: Routes
   alias SamplePhx.User
 
   def init(opts) do
@@ -12,6 +14,18 @@ defmodule SamplePhxWeb.Auth do
 
     # Make current_user available in all downstream functions including controllers and views.
     assign(conn, :current_user, user)
+  end
+
+  def authenticate_user(conn, _opts) do
+    if conn.assigns.current_user do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be logged in to access that page")
+      |> redirect(to: Routes.page_path(conn, :index))
+      # Stop any downstream transformations.
+      |> halt()
+    end
   end
 
   def login(conn, user) do
