@@ -23,8 +23,8 @@ defmodule SamplePhxWeb do
 
       import Plug.Conn
       import SamplePhxWeb.Gettext
-      alias SamplePhxWeb.Router.Helpers, as: Routes
       import SamplePhxWeb.Auth, only: [authenticate_user: 2]
+      alias SamplePhxWeb.Router.Helpers, as: Routes
     end
   end
 

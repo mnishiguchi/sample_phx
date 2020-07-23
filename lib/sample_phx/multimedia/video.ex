@@ -1,4 +1,4 @@
-defmodule SamplePhx.Accounts.Video do
+defmodule SamplePhx.Multimedia.Video do
   use Ecto.Schema
   import Ecto.Changeset
 

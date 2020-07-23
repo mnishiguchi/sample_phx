@@ -27,7 +27,6 @@ defmodule SamplePhxWeb.Auth do
     end
   end
 
-  @spec login(Plug.Conn.t(), atom | %{id: any}) :: Plug.Conn.t()
   def login(conn, user) do
     conn
     |> assign(:current_user, user)
@@ -37,7 +36,6 @@ defmodule SamplePhxWeb.Auth do
     |> configure_session(renew: true)
   end
 
-  @spec logout(Plug.Conn.t()) :: Plug.Conn.t()
   def logout(conn) do
     configure_session(conn, drop: true)
   end

@@ -1,23 +1,21 @@
 defmodule SamplePhxWeb.VideoController do
   use SamplePhxWeb, :controller
 
-  alias SamplePhx.Accounts
-  alias SamplePhx.Accounts.Video
-
-  plug :scrub_params, "video" when action in [:create, :update]
+  alias SamplePhx.Multimedia
+  alias SamplePhx.Multimedia.Video
 
   def index(conn, _params) do
-    videos = Accounts.list_videos()
+    videos = Multimedia.list_videos()
     render(conn, "index.html", videos: videos)
   end
 
   def new(conn, _params) do
-    changeset = Accounts.change_video(%Video{})
+    changeset = Multimedia.change_video(%Video{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"video" => video_params}) do
-    case Accounts.create_video(video_params) do
+    case Multimedia.create_video(video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
@@ -29,20 +27,20 @@ defmodule SamplePhxWeb.VideoController do
   end
 
   def show(conn, %{"id" => id}) do
-    video = Accounts.get_video!(id)
+    video = Multimedia.get_video!(id)
     render(conn, "show.html", video: video)
   end
 
   def edit(conn, %{"id" => id}) do
-    video = Accounts.get_video!(id)
-    changeset = Accounts.change_video(video)
+    video = Multimedia.get_video!(id)
+    changeset = Multimedia.change_video(video)
     render(conn, "edit.html", video: video, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "video" => video_params}) do
-    video = Accounts.get_video!(id)
+    video = Multimedia.get_video!(id)
 
-    case Accounts.update_video(video, video_params) do
+    case Multimedia.update_video(video, video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video updated successfully.")
@@ -54,8 +52,8 @@ defmodule SamplePhxWeb.VideoController do
   end
 
   def delete(conn, %{"id" => id}) do
-    video = Accounts.get_video!(id)
-    {:ok, _video} = Accounts.delete_video(video)
+    video = Multimedia.get_video!(id)
+    {:ok, _video} = Multimedia.delete_video(video)
 
     conn
     |> put_flash(:info, "Video deleted successfully.")
