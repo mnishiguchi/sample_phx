@@ -6,6 +6,7 @@ defmodule SamplePhx.Multimedia do
   import Ecto.Query, warn: false
   alias SamplePhx.Repo
   alias SamplePhx.Multimedia.Video
+  alias SamplePhx.Accounts
 
   @doc """
   Returns the list of videos.
@@ -41,16 +42,17 @@ defmodule SamplePhx.Multimedia do
 
   ## Examples
 
-      iex> create_video(%{field: value})
+      iex> create_video(user, %{field: value})
       {:ok, %Video{}}
 
-      iex> create_video(%{field: bad_value})
+      iex> create_video(user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_video(attrs \\ %{}) do
+  def create_video(%Accounts.User{} = user, attrs \\ %{}) do
     %Video{}
     |> Video.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 
