@@ -7,6 +7,7 @@ defmodule SamplePhx.Multimedia.Video do
     field :title, :string
     field :url, :string
     belongs_to :user, SamplePhx.Accounts.User
+    belongs_to :category, SamplePhx.Multimedia.Category
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule SamplePhx.Multimedia.Video do
   @doc false
   def changeset(video, attrs) do
     video
-    |> cast(attrs, [:url, :title, :description])
+    |> cast(attrs, [:url, :title, :description, :category_id])
     |> validate_required([:url, :title, :description])
   end
 end
