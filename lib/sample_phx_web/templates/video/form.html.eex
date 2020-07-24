@@ -5,19 +5,9 @@
     </div>
   <% end %>
 
-  <%= label f, :url %>
-  <%= text_input f, :url %>
-  <%= error_tag f, :url %>
+  <%= input_tag f, :url %>
+  <%= input_tag f, :title %>
+  <%= input_tag f, :description, using: :textarea %>
 
-  <%= label f, :title %>
-  <%= text_input f, :title %>
-  <%= error_tag f, :title %>
-
-  <%= label f, :description %>
-  <%= textarea f, :description %>
-  <%= error_tag f, :description %>
-
-  <div>
-    <%= submit "Save" %>
-  </div>
+  <%= submit "Save", class: "btn btn-primary" %>
 <% end %>

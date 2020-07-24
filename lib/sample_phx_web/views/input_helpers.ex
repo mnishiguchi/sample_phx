@@ -1,47 +1,32 @@
 defmodule SamplePhxWeb.InputHelpers do
   use Phoenix.HTML
 
+  # http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/
   def input_tag(form, field, opts \\ []) do
-    form_input_type = Phoenix.HTML.Form.input_type(form, field)
-
-    required = required_field?(form, field)
-
-    wrapper_class_names = Keyword.get_values(opts, :wrapper_class) ++ ["form-group"]
-
-    wrapper_opts = [class: Enum.join(wrapper_class_names, " ")]
-
-    inputs_class_names =
-      cond do
-        # This field has an error.
-        form.errors[field] ->
-          Keyword.get_values(opts, :input_class) ++ ["form-control is-invalid"]
-
-        # Other input fields have an error, not this field.
-        # The "action" key exists in the changeset but not in conn.
-        Map.get(form.source, :action) ->
-          Keyword.get_values(opts, :input_class) ++ ["form-control is-valid"]
-
-        true ->
-          Keyword.get_values(opts, :input_class) ++ ["form-control"]
-      end
-
-    input_opts =
-      [class: Enum.join(inputs_class_names, " ")] ++
-        Keyword.drop(opts, [:wrapper_class, :input_class])
-
-    label_text = Keyword.get(opts, :label) || humanize(field)
+    form_input_type = opts[:using] || Phoenix.HTML.Form.input_type(form, field)
+    required = input_validations(form, field) |> Keyword.get(:required)
+    wrapper_opts = [class: "form-group"]
+    input_opts = [class: "form-control #{form_state_class(form, field)}"]
+    label_text = opts[:label] || humanize(field)
 
     content_tag :div, wrapper_opts do
-      [
-        label_tag(form, field, label_text, required),
-        apply(Phoenix.HTML.Form, form_input_type, [form, field, input_opts]),
-        SamplePhxWeb.ErrorHelpers.error_tag(form, field)
-      ]
+      label = label_tag(form, field, label_text, required)
+      input = apply(Phoenix.HTML.Form, form_input_type, [form, field, input_opts])
+      error = SamplePhxWeb.ErrorHelpers.error_tag(form, field)
+
+      [label, input, error]
     end
   end
 
-  def required_field?(form, field) do
-    input_validations(form, field) |> Keyword.get(:required)
+  defp form_state_class(form, field) do
+    cond do
+      # The form was not yet submitted.
+      # The "action" key exists in the changeset but not in conn.
+      !Map.get(form.source, :action) -> ""
+      # This field has an error.
+      form.errors[field] -> "is-invalid"
+      true -> "is-valid"
+    end
   end
 
   def label_tag(form, field, label_text, required \\ false) do
