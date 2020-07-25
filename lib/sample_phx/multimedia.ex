@@ -5,7 +5,7 @@ defmodule SamplePhx.Multimedia do
 
   import Ecto.Query, warn: false
   alias SamplePhx.Repo
-  alias SamplePhx.Multimedia.Video
+  alias SamplePhx.Multimedia.{Video, Category}
   alias SamplePhx.Accounts
 
   @doc """
@@ -118,5 +118,20 @@ defmodule SamplePhx.Multimedia do
   # Fetches all the videos with a matching user.
   defp user_videos_query(query, %Accounts.User{id: user_id}) do
     from(v in query, where: v.user_id == ^user_id)
+  end
+
+  @doc """
+  Upserts a category.
+
+  ## Examples
+
+      iex> create_category!(name)
+      %Category{}
+
+      iex> create_category!(nil)
+      %** (Postgrex.Error) ERROR 23502 (not_null_violation)
+  """
+  def create_category!(name) do
+    Repo.insert!(%Category{name: name}, on_conflict: :nothing)
   end
 end
