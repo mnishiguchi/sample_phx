@@ -120,6 +120,12 @@ defmodule SamplePhx.Multimedia do
     from(v in query, where: v.user_id == ^user_id)
   end
 
+  def list_alphabetical_categories do
+    Category
+    |> Category.alphabetical()
+    |> Repo.all()
+  end
+
   @doc """
   Upserts a category.
 

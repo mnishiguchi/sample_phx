@@ -4,6 +4,8 @@ defmodule SamplePhxWeb.VideoController do
   alias SamplePhx.Multimedia
   alias SamplePhx.Multimedia.Video
 
+  plug :load_categories when action in ~w(new create edit update)a
+
   # Our custom action function.
   # Phoenix invokes the default action function at the end of the controller pipeline.
   def action(conn, _params) do
@@ -65,5 +67,9 @@ defmodule SamplePhxWeb.VideoController do
     conn
     |> put_flash(:info, "Video deleted successfully.")
     |> redirect(to: Routes.video_path(conn, :index))
+  end
+
+  defp load_categories(conn, _) do
+    assign(conn, :categories, Multimedia.list_alphabetical_categories())
   end
 end
