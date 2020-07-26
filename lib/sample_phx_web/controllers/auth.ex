@@ -9,10 +9,20 @@ defmodule SamplePhxWeb.Auth do
 
   def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
-    user = user_id && SamplePhx.Accounts.get_user(user_id)
 
-    # Make current_user available in all downstream functions including controllers and views.
-    assign(conn, :current_user, user)
+    cond do
+      # If current_user is already present in conn.assigns, we honor it, no matter how it got there.
+      # It makes our code more testable.
+      conn.assigns[:current_user] ->
+        conn
+
+      user = user_id && SamplePhx.Accounts.get_user(user_id) ->
+        # Make current_user available in all downstream functions including controllers and views.
+        assign(conn, :current_user, user)
+
+      true ->
+        assign(conn, :current_user, nil)
+    end
   end
 
   def authenticate_user(conn, _opts) do
