@@ -3,27 +3,28 @@ defmodule SamplePhx.TestHelpers do
   alias Accounts.User
 
   def user_fixture(attrs \\ %{}) do
+    default_user_attrs = %{
+      name: "Some User",
+      username: "user#{System.unique_integer([:positive])}",
+      password: attrs[:password] || "password"
+    }
+
     {:ok, user} =
       attrs
-      |> Enum.into(%{
-        name: "Some User",
-        username: "user#{System.unique_integer([:positive])}",
-        password: attrs[:password] || "password"
-      })
+      |> Enum.into(default_user_attrs)
       |> Accounts.register_user()
 
     user
   end
 
   def video_fixture(%User{} = user, attrs \\ %{}) do
-    attrs =
-      Enum.into(attrs, %{
-        title: "A Title",
-        url: "https://example.com",
-        description: "A description"
-      })
+    default_video_attrs = %{
+      title: "A Title",
+      url: "https://example.com",
+      description: "A description"
+    }
 
-    {:ok, video} = Multimedia.create_video(user, attrs)
+    {:ok, video} = Multimedia.create_video(user, Enum.into(attrs, default_video_attrs))
     video
   end
 end
