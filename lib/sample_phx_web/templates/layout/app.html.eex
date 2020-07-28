@@ -19,9 +19,9 @@
               <li class="breadcrumb-item"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
             <% end %>
             <%= if @current_user do %>
-              <li class="breadcrumb-item"><%= link "Users", to: Routes.user_path(@conn, :index) %></li>
-              <li class="breadcrumb-item"><%= link "Videos", to: Routes.video_path(@conn, :index) %></li>
               <li class="breadcrumb-item"><%= @current_user.username %></li>
+              <li class="breadcrumb-item"><%= link "All Users", to: Routes.user_path(@conn, :index) %></li>
+              <li class="breadcrumb-item"><%= link "My Videos", to: Routes.video_path(@conn, :index) %></li>
               <li class="breadcrumb-item"><%= link "Log out", to: Routes.session_path(@conn, :delete, @current_user), method: "delete" %></li>
             <% else %>
               <li class="breadcrumb-item"><%= link "Register", to: Routes.user_path(@conn, :new) %></li>

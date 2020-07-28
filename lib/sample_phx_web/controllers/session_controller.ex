@@ -11,7 +11,7 @@ defmodule SamplePhxWeb.SessionController do
         conn
         |> SamplePhxWeb.Auth.login(user)
         |> put_flash(:info, "Welcome back")
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> redirect(to: Routes.user_path(conn, :index))
 
       {:error, _reason} ->
         conn
