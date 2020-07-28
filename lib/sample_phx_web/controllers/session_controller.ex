@@ -2,7 +2,11 @@ defmodule SamplePhxWeb.SessionController do
   use SamplePhxWeb, :controller
 
   def new(conn, _params) do
-    render(conn, "new.html")
+    if conn.assigns.current_user do
+      redirect(conn, to: Routes.user_path(conn, :index))
+    else
+      render(conn, "new.html")
+    end
   end
 
   def create(conn, %{"session" => %{"username" => username, "password" => password}}) do

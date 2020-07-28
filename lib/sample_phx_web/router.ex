@@ -20,6 +20,7 @@ defmodule SamplePhxWeb.Router do
     get "/", PageController, :index
     resources "/sessions", SessionController, only: ~w(new create delete)a
     resources "/users", UserController, only: ~w(index show new create)a
+    get "/watch/:id", WatchController, :show
   end
 
   scope "/manage", SamplePhxWeb do
