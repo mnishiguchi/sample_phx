@@ -7,20 +7,24 @@ defmodule SamplePhxWeb.VideoChannel do
   "videos:" <> video_id will match all topics starting with "videos:" and assign
   the rest of the topic to the video_id variable.
   """
-  def join("videos:" <> video_id, _params, socket) do
-    :timer.send_interval(5_000, :ping)
+  def join("videos:" <> video_id, params, socket) do
     {:ok, socket}
   end
 
   @doc """
-  Takes the existing count (or a default of 1) and increments that count.
-  Invoked whenever an Elixir message reaches the channel. In this case, we match
-  on the periodic `:ping` message and increase a counter every time it arrives.
+  The `broadcast!` function sends an event to all users on the current topic.
+  Behind the scenes, `broadcast!` uses Phoenix's Publish and Subscribe (PubSub)
+  system to send the message to all processes listening on the given topic.
   """
-  def handle_info(:ping, socket) do
-    count = socket.assigns[:count] || 1
-    push(socket, "ping", %{count: count})
+  def handle_in("new_annotation", params, socket) do
+    # The payload is delivered to all clients on this topic. Be sure to control
+    # the payload as closely as possible.
+    broadcast!(socket, "new_annotation", %{
+      user: %{username: "anon"},
+      body: params["body"],
+      at: params["at"]
+    })
 
-    {:noreply, assign(socket, :count, count + 1)}
+    {:reply, :ok, socket}
   end
 end
