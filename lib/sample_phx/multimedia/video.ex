@@ -9,8 +9,10 @@ defmodule SamplePhx.Multimedia.Video do
     field :title, :string
     field :url, :string
     field :slug, :string
+
     belongs_to :user, SamplePhx.Accounts.User
     belongs_to :category, SamplePhx.Multimedia.Category
+    has_many :annotations, SamplePhx.Multimedia.Annotation
 
     timestamps()
   end

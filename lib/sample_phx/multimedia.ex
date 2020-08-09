@@ -5,7 +5,7 @@ defmodule SamplePhx.Multimedia do
 
   import Ecto.Query, warn: false
   alias SamplePhx.Repo
-  alias SamplePhx.Multimedia.{Video, Category}
+  alias SamplePhx.Multimedia.{Video, Category, Annotation}
   alias SamplePhx.Accounts
 
   @doc """
@@ -139,5 +139,36 @@ defmodule SamplePhx.Multimedia do
   """
   def create_category!(name) do
     Repo.insert!(%Category{name: name}, on_conflict: :nothing)
+  end
+
+  @doc """
+  Inserts a user's annotation of a given video id.
+
+  ## Examples
+
+      iex> Multimedia.annotate_video(user, 1, %{ body: "nice", at: 100 })
+      {:ok, %Annotation{}}
+  """
+  def annotate_video(%Accounts.User{id: user_id}, video_id, attrs) do
+    %Annotation{video_id: video_id, user_id: user_id}
+    |> Annotation.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns the list of annotations of a video.
+
+  ## Examples
+
+      iex> Multimedia.list_annotations(video)
+      [%Annotation{}]
+  """
+  def list_annotations(%Video{} = video) do
+    Repo.all(
+      from annotation in Ecto.assoc(video, :annotations),
+        order_by: [asc: annotation.at, asc: annotation.id],
+        limit: 500,
+        preload: [:user]
+    )
   end
 end

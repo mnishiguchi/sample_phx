@@ -37,8 +37,12 @@ export default {
 
     videoChannel
       .join()
-      .receive('ok', (resp) => console.log('joined the video channel', resp))
-      .receive('error', (reason) => console.log('join failed', reason));
+      .receive('ok', ({ annotations }) => {
+        annotations.forEach((annotation) => this.renderAnnotation($msgContainer, annotation));
+      })
+      .receive('error', (reason) => {
+        console.log('join failed', reason);
+      });
   },
 
   // Escapes user input before injecting values into the page. This strategy

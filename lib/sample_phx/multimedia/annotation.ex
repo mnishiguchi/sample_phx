@@ -5,8 +5,9 @@ defmodule SamplePhx.Multimedia.Annotation do
   schema "annotations" do
     field :at, :integer
     field :body, :string
-    field :user_id, :id
-    field :video_id, :id
+
+    belongs_to :user, SamplePhx.Accounts.User
+    belongs_to :video, SamplePhx.Multimedia.Video
 
     timestamps()
   end
