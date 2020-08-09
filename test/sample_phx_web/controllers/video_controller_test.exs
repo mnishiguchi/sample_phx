@@ -128,8 +128,10 @@ defmodule SamplePhxWeb.VideoControllerTest do
 
       conn_after_update = put(conn, Routes.video_path(conn, :update, video), video: %{title: "Updated Title"})
 
-      assert redirected_to(conn_after_update) == Routes.video_path(conn_after_update, :show, video)
-      conn = get(conn, Routes.video_path(conn, :show, video))
+      updated_video_path = "/manage/videos/#{video.id}-updated-title"
+      assert redirected_to(conn_after_update) == updated_video_path
+
+      conn = get(conn, updated_video_path)
       assert html_response(conn, 200) =~ "Updated Title"
     end
 
