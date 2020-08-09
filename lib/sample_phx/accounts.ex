@@ -5,7 +5,7 @@ defmodule SamplePhx.Accounts do
 
   import Ecto.Query, warn: false
   alias SamplePhx.Repo
-  alias SamplePhx.Accounts.User
+  alias __MODULE__.User
 
   @doc """
   Returns the list of users.

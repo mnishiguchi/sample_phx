@@ -5,7 +5,7 @@ defmodule SamplePhx.Multimedia do
 
   import Ecto.Query, warn: false
   alias SamplePhx.Repo
-  alias SamplePhx.Multimedia.{Video, Category, Annotation}
+  alias __MODULE__.{Video, Category, Annotation}
   alias SamplePhx.Accounts
 
   @doc """
