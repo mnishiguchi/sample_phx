@@ -1,4 +1,4 @@
-// A vido player object. It builds an API for video players with most important features for our
+// A video player object. It builds an API for video players with most important features for our
 // app. It will insulate us from changes in youTube and also let us add other video players over
 // time. https://developers.google.com/youtube/iframe_api_reference
 export default {

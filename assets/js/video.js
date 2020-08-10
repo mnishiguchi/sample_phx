@@ -17,7 +17,15 @@ export default {
     const msgInput = document.getElementById('msg-input');
     const postButton = document.getElementById('msg-submit');
 
-    const videoChannel = socket.channel(`videos:${videoId}`);
+    // Bump this value every time we see a new annotation. Then whenever we
+    // rejoin following a crash or disconnect, we can send our `last_seen_id` to
+    // the server. That way, the server can only send the data we missed.
+    let lastSeenId = 0;
+
+    // Let the user join the channel for a specified video.
+    const videoChannel = socket.channel(`videos:${videoId}`, () => {
+      return { last_seen_id: lastSeenId };
+    });
 
     postButton.addEventListener('click', (e) => {
       const payload = { body: msgInput.value, at: Player.getCurrentTime() };
@@ -33,6 +41,7 @@ export default {
 
     // When we push an event to the server, we can opt to receive a response.
     videoChannel.on('new_annotation', (resp) => {
+      lastSeenId = resp.id;
       this.renderAnnotation(msgContainer, resp);
     });
 
@@ -51,6 +60,11 @@ export default {
     videoChannel
       .join()
       .receive('ok', ({ annotations }) => {
+        const ids = annotations.map((annotation) => annotation.id);
+        if (ids.length > 0) {
+          lastSeenId = Math.max(...ids);
+        }
+
         this.scheduleMessages(msgContainer, annotations);
       })
       .receive('error', (reason) => {

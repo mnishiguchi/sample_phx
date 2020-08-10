@@ -163,9 +163,10 @@ defmodule SamplePhx.Multimedia do
       iex> Multimedia.list_annotations(video)
       [%Annotation{}]
   """
-  def list_annotations(%Video{} = video) do
+  def list_annotations(%Video{} = video, since_id \\ 0) do
     Repo.all(
       from annotation in Ecto.assoc(video, :annotations),
+        where: ^since_id < annotation.id,
         order_by: [asc: annotation.at, asc: annotation.id],
         limit: 500,
         preload: [:user]
