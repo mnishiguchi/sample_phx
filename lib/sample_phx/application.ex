@@ -14,9 +14,11 @@ defmodule SamplePhx.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: SamplePhx.PubSub},
       # Start the Endpoint (http/https)
-      SamplePhxWeb.Endpoint
+      SamplePhxWeb.Endpoint,
       # Start a worker by calling: SamplePhx.Worker.start_link(arg)
       # {SamplePhx.Worker, arg}
+      # Start the Presence tracking
+      SamplePhxWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

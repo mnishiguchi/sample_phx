@@ -2,7 +2,7 @@ defmodule SamplePhxWeb.VideoChannel do
   use SamplePhxWeb, :channel
 
   alias SamplePhx.{Accounts, Multimedia}
-  alias SamplePhxWeb.AnnotationView
+  alias SamplePhxWeb.{Presence, AnnotationView}
 
   @doc """
   Socket will hold all of the state for a given conversation. Each socket can
@@ -11,6 +11,8 @@ defmodule SamplePhxWeb.VideoChannel do
   the rest of the topic to the video_id variable.
   """
   def join("videos:" <> video_id, params, socket) do
+    send(self(), :after_join)
+
     last_seen_id = params["last_seen_id"] || 0
     video_id = String.to_integer(video_id)
     video = Multimedia.get_video!(video_id)
@@ -20,7 +22,7 @@ defmodule SamplePhxWeb.VideoChannel do
       |> Multimedia.list_annotations(last_seen_id)
       |> Phoenix.View.render_many(AnnotationView, "annotation.json")
 
-    {:ok, %{annotations: annotations}, assign(socket, :video_id,video_id) }
+    {:ok, %{annotations: annotations}, assign(socket, :video_id, video_id)}
   end
 
   @doc """
@@ -58,5 +60,28 @@ defmodule SamplePhxWeb.VideoChannel do
       {:error, changeset} ->
         {:reply, {:error, %{errors: changeset}}, socket}
     end
+  end
+
+  @doc """
+  Handles a user-defined message called `:after_join`.
+  """
+  def handle_info(:after_join, socket) do
+    push(socket, "presence_state", Presence.list(socket))
+
+    # A user is a unique entity within the presence. A user can have multiple
+    # sessions, such as a single user with open browser tabs or multiple
+    # devices.
+    {:ok, _} =
+      Presence.track(
+        socket,
+        # A key to track.
+        socket.assigns.user_id,
+        # A map of metadata, any arbitrary data we want to associate with a
+        # session.
+        %{device: "browser"}
+      )
+
+    # Simply return our unchanged socket.
+    {:noreply, socket}
   end
 end

@@ -1,3 +1,4 @@
+import { Presence } from 'phoenix';
 import Player from './player';
 
 // Video
@@ -16,6 +17,7 @@ export default {
     const msgContainer = document.getElementById('msg-container');
     const msgInput = document.getElementById('msg-input');
     const postButton = document.getElementById('msg-submit');
+    const userList = document.getElementById('user-list');
 
     // Bump this value every time we see a new annotation. Then whenever we
     // rejoin following a crash or disconnect, we can send our `last_seen_id` to
@@ -25,6 +27,20 @@ export default {
     // Let the user join the channel for a specified video.
     const videoChannel = socket.channel(`videos:${videoId}`, () => {
       return { last_seen_id: lastSeenId };
+    });
+
+    const presence = new Presence(videoChannel);
+
+    // Render our users as list items when users join or leave the app.
+    presence.onSync(() => {
+      presence.list((id, { metas: metas }) => console.log(id, metas));
+
+      userList.innerHTML = presence
+        .list((id, { metas: [first, ...rest] }) => {
+          const count = rest.length + 1;
+          return `<li>${id}: (${count})</li>`;
+        })
+        .join('');
     });
 
     postButton.addEventListener('click', (e) => {
