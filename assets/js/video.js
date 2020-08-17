@@ -33,12 +33,10 @@ export default {
 
     // Render our users as list items when users join or leave the app.
     presence.onSync(() => {
-      presence.list((id, { metas: metas }) => console.log(id, metas));
-
       userList.innerHTML = presence
-        .list((id, { metas: [first, ...rest] }) => {
+        .list((id, { metas: [first, ...rest], user: user }) => {
           const count = rest.length + 1;
-          return `<li>${id}: (${count})</li>`;
+          return `<li>${user.username}: (${count})</li>`;
         })
         .join('');
     });

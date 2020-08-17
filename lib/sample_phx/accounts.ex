@@ -20,6 +20,18 @@ defmodule SamplePhx.Accounts do
     Repo.all(User)
   end
 
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> Accounts.list_users_with_ids([1, 2])
+      [%User{id: 1, ...}, %User{id: 2, ...}]
+  """
+  def list_users_with_ids(ids) do
+    Repo.all(from(u in User, where: u.id in ^ids))
+  end
+
   def get_user(id), do: Repo.get(User, id)
 
   @doc """
