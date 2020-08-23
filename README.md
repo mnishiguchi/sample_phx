@@ -3,6 +3,8 @@
 ![](https://img.shields.io/badge/Elixir-1.10.4%20(OTP%2023)-blue)
 ![](https://img.shields.io/badge/Phoenix-1.5.3-blue)
 
+This is a sample Phoenix app, with which I practiced web development using Elixir/OTP, following the book [Programming Phoenix 1.4](https://pragprog.com/titles/phoenix14/programming-phoenix-1-4/).
+
 ## Get started
 
 To start your Phoenix server:
